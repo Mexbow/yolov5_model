@@ -118,21 +118,16 @@ def custom(path="path/to/model.pt", autoshape=True, _verbose=True, device=None):
 
     Returns:
         torch.nn.Module: A YOLOv5 model loaded with the specified parameters.
-
-    Notes:
-        For more details on loading models from PyTorch Hub:
-        https://docs.ultralytics.com/yolov5/tutorials/pytorch_hub_model_loading
-
-    Examples:
-        ```python
-        # Load model from a given path with autoshape enabled on the best available device
-        model = torch.hub.load('ultralytics/yolov5', 'custom', 'yolov5s.pt')
-
-        # Load model from a local path without autoshape on the CPU device
-        model = torch.hub.load('.', 'custom', 'yolov5s.pt', source='local', autoshape=False, device='cpu')
-        ```
     """
-    return _create(path, autoshape=autoshape, verbose=_verbose, device=device)
+    # Define the correct URL for your custom weights
+    weights_path = 'https://raw.githubusercontent.com/Mexbow/yolov5_model/master/weights/best14.pt'
+    
+    if _verbose:
+        print(f"Loading weights from {weights_path}...")
+    
+    # Load the model with the specified weights from the GitHub URL
+    return _create(weights_path, autoshape=autoshape, verbose=_verbose, device=device)
+
 
 
 def yolov5n(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):

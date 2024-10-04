@@ -171,49 +171,6 @@ def yolov5n(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=Tr
     """
     return _create("yolov5n", pretrained, channels, classes, autoshape, _verbose, device)
 
-
-def best14(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
-    """
-    Create a YOLOv5-small (yolov5s) model with options for pretraining, input channels, class count, autoshaping,
-    verbosity, and device configuration.
-
-    Args:
-        pretrained (bool, optional): Flag to load pretrained weights into the model. Defaults to True.
-        channels (int, optional): Number of input channels. Defaults to 3.
-        classes (int, optional): Number of model classes. Defaults to 80.
-        autoshape (bool, optional): Whether to wrap the model with YOLOv5's .autoshape() for handling various input formats.
-            Defaults to True.
-        _verbose (bool, optional): Flag to print detailed information regarding model loading. Defaults to True.
-        device (str | torch.device | None, optional): Device to use for model computation, can be 'cpu', 'cuda', or
-            torch.device instances. If None, automatically selects the best available device. Defaults to None.
-
-    Returns:
-        torch.nn.Module: The YOLOv5-small model configured and loaded according to the specified parameters.
-
-    Example:
-        ```python
-        import torch
-
-        # Load the official YOLOv5-small model with pretrained weights
-        model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
-
-        # Load the YOLOv5-small model from a specific branch
-        model = torch.hub.load('ultralytics/yolov5:master', 'yolov5s')
-
-        # Load a custom YOLOv5-small model from a local checkpoint
-        model = torch.hub.load('ultralytics/yolov5', 'custom', 'yolov5s.pt')
-
-        # Load a local YOLOv5-small model specifying source as local repository
-        model = torch.hub.load('.', 'custom', 'yolov5s.pt', source='local')
-        ```
-
-    Notes:
-        For more details on model loading and customization, visit
-        the [YOLOv5 PyTorch Hub Documentation](https://pytorch.org/hub/ultralytics_yolov5).
-    """
-    return _create("best14", pretrained, channels, classes, autoshape, _verbose, device)
-
-
 def yolov5n(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
     """
     Instantiates the YOLOv5-nano model with options for pretraining, input channels, class count, autoshaping,
@@ -291,7 +248,11 @@ def yolov5s(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=Tr
         For more details on model loading and customization, visit
         the [YOLOv5 PyTorch Hub Documentation](https://pytorch.org/hub/ultralytics_yolov5).
     """
+    if pretrained:
+        # Load custom weights if pretrained is True
+        return _create("yolov5s", pretrained, channels, classes, autoshape, _verbose, device, path='weights/best14.pt')
     return _create("yolov5s", pretrained, channels, classes, autoshape, _verbose, device)
+
 
 
 def yolov5m(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):

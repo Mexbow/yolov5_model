@@ -103,9 +103,6 @@ def _create(name, pretrained=True, channels=3, classes=80, autoshape=True, verbo
         raise Exception(s) from e
 
 
-import os
-import requests
-
 def custom(path="path/to/model.pt", autoshape=True, _verbose=True, device=None):
     """
     Loads a custom or local YOLOv5 model from a given path with optional autoshaping and device specification.
@@ -121,31 +118,21 @@ def custom(path="path/to/model.pt", autoshape=True, _verbose=True, device=None):
 
     Returns:
         torch.nn.Module: A YOLOv5 model loaded with the specified parameters.
+
+    Notes:
+        For more details on loading models from PyTorch Hub:
+        https://docs.ultralytics.com/yolov5/tutorials/pytorch_hub_model_loading
+
+    Examples:
+        ```python
+        # Load model from a given path with autoshape enabled on the best available device
+        model = torch.hub.load('ultralytics/yolov5', 'custom', 'yolov5s.pt')
+
+        # Load model from a local path without autoshape on the CPU device
+        model = torch.hub.load('.', 'custom', 'yolov5s.pt', source='local', autoshape=False, device='cpu')
+        ```
     """
-    # Define the correct URL for your custom weights
-    weights_path = 'weights/best14.pt'  # Local path to save the weights
-
-    # Check if the weights file exists
-    if not os.path.isfile(weights_path):
-        # Download the weights if it does not exist
-        url = 'https://raw.githubusercontent.com/Mexbow/yolov5_model/master/weights/best14.pt'
-        if _verbose:
-            print(f"Downloading weights from {url}...")
-        response = requests.get(url)
-        response.raise_for_status()  # Raise an error for bad responses
-            
-        # Save the weights file locally
-        os.makedirs(os.path.dirname(weights_path), exist_ok=True)  # Create directory if it doesn't exist
-        with open(weights_path, 'wb') as f:
-            f.write(response.content)
-        if _verbose:
-            print("Weights downloaded successfully.")
-
-    # Load the model with the specified local weights
-    return _create(weights_path, autoshape=autoshape, verbose=_verbose, device=device)
-
-
-
+    return _create(path, autoshape=autoshape, verbose=_verbose, device=device)
 
 
 def yolov5n(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):

@@ -130,6 +130,7 @@ def custom(path="path/to/model.pt", autoshape=True, _verbose=True, device=None):
 
 
 
+
 def yolov5n(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
     """
     Instantiates the YOLOv5-nano model with options for pretraining, input channels, class count, autoshaping,

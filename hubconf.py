@@ -103,6 +103,9 @@ def _create(name, pretrained=True, channels=3, classes=80, autoshape=True, verbo
         raise Exception(s) from e
 
 
+import os
+import requests
+
 def custom(path="path/to/model.pt", autoshape=True, _verbose=True, device=None):
     """
     Loads a custom or local YOLOv5 model from a given path with optional autoshaping and device specification.
@@ -120,13 +123,27 @@ def custom(path="path/to/model.pt", autoshape=True, _verbose=True, device=None):
         torch.nn.Module: A YOLOv5 model loaded with the specified parameters.
     """
     # Define the correct URL for your custom weights
-    weights_path = 'https://raw.githubusercontent.com/Mexbow/yolov5_model/master/weights/best14.pt'
-    
-    if _verbose:
-        print(f"Loading weights from {weights_path}...")
-    
-    # Load the model with the specified weights from the GitHub URL
+    weights_path = 'weights/best14.pt'  # Local path to save the weights
+
+    # Check if the weights file exists
+    if not os.path.isfile(weights_path):
+        # Download the weights if it does not exist
+        url = 'https://raw.githubusercontent.com/Mexbow/yolov5_model/master/weights/best14.pt'
+        if _verbose:
+            print(f"Downloading weights from {url}...")
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an error for bad responses
+            
+        # Save the weights file locally
+        os.makedirs(os.path.dirname(weights_path), exist_ok=True)  # Create directory if it doesn't exist
+        with open(weights_path, 'wb') as f:
+            f.write(response.content)
+        if _verbose:
+            print("Weights downloaded successfully.")
+
+    # Load the model with the specified local weights
     return _create(weights_path, autoshape=autoshape, verbose=_verbose, device=device)
+
 
 
 

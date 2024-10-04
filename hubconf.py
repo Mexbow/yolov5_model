@@ -134,42 +134,6 @@ def custom(path="path/to/model.pt", autoshape=True, _verbose=True, device=None):
     """
     return _create(path, autoshape=autoshape, verbose=_verbose, device=device)
 
-def yolov5n(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
-    """
-    Instantiates the YOLOv5-nano model with options for pretraining, input channels, class count, autoshaping,
-    verbosity, and device.
-
-    Args:
-        pretrained (bool): If True, loads pretrained weights into the model. Defaults to True.
-        channels (int): Number of input channels for the model. Defaults to 3.
-        classes (int): Number of classes for object detection. Defaults to 80.
-        autoshape (bool): If True, applies the YOLOv5 .autoshape() wrapper to the model for various formats (file/URI/PIL/
-            cv2/np) and non-maximum suppression (NMS) during inference. Defaults to True.
-        _verbose (bool): If True, prints detailed information to the screen. Defaults to True.
-        device (str | torch.device | None): Specifies the device to use for model computation. If None, uses the best device
-            available (i.e., GPU if available, otherwise CPU). Defaults to None.
-
-    Returns:
-        DetectionModel | ClassificationModel | SegmentationModel: The instantiated YOLOv5-nano model, potentially with
-            pretrained weights and autoshaping applied.
-
-    Notes:
-        For further details on loading models from PyTorch Hub, refer to [PyTorch Hub models](https://pytorch.org/hub/
-        ultralytics_yolov5).
-
-    Examples:
-        ```python
-        import torch
-        from ultralytics import yolov5n
-
-        # Load the YOLOv5-nano model with defaults
-        model = yolov5n()
-
-        # Load the YOLOv5-nano model with a specific device
-        model = yolov5n(device='cuda')
-        ```
-    """
-    return _create("yolov5n", pretrained, channels, classes, autoshape, _verbose, device)
 
 def yolov5n(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
     """
@@ -248,11 +212,7 @@ def yolov5s(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=Tr
         For more details on model loading and customization, visit
         the [YOLOv5 PyTorch Hub Documentation](https://pytorch.org/hub/ultralytics_yolov5).
     """
-    if pretrained:
-        # Load custom weights if pretrained is True
-        return _create("yolov5s", pretrained, channels, classes, autoshape, _verbose, device, path='weights/best14.pt')
     return _create("yolov5s", pretrained, channels, classes, autoshape, _verbose, device)
-
 
 
 def yolov5m(pretrained=True, channels=3, classes=80, autoshape=True, _verbose=True, device=None):
